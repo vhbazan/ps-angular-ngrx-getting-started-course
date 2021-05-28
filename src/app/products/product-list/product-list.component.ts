@@ -1,7 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Store } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import { Product } from '../product';
 import { ProductService } from '../product.service';
@@ -15,7 +16,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
   pageTitle = 'Products';
   errorMessage: string;
 
-  displayCode: boolean;
+  displayCode$: Observable<boolean>;
 
   products: Product[];
 
@@ -29,6 +30,12 @@ export class ProductListComponent implements OnInit, OnDestroy {
     this.sub = this.productService.selectedProductChanges$.subscribe(
       currentProduct => this.selectedProduct = currentProduct
     );
+
+    this.displayCode$ = this.store.pipe(
+      select('products'),
+      map(products =>
+        products.showProductCode )
+    )
 
     this.productService.getProducts().subscribe({
       next: (products: Product[]) => this.products = products,
