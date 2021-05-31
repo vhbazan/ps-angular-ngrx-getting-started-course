@@ -6,7 +6,7 @@ import { map } from 'rxjs/operators';
 
 import { Product } from '../product';
 import { ProductService } from '../product.service';
-import { State } from '../state/product.reducer';
+import { getShowProductCode, State } from '../state/product.reducer';
 
 @Component({
   selector: 'pm-product-list',
@@ -33,10 +33,8 @@ export class ProductListComponent implements OnInit, OnDestroy {
     );
 
     this.displayCode$ = this.store.pipe(
-      select('products'),
-      map(products =>
-        products.showProductCode )
-    )
+      select(getShowProductCode)
+    );
 
     this.productService.getProducts().subscribe({
       next: (products: Product[]) => this.products = products,
