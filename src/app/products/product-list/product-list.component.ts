@@ -2,7 +2,8 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 
 import { Observable, Subscription } from 'rxjs';
-import { map } from 'rxjs/operators';
+import * as ProductActions from "../state/product.actions";
+
 
 import { Product } from '../product';
 import { ProductService } from '../product.service';
@@ -47,9 +48,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
   }
 
   checkChanged(): void {
-    this.store.dispatch({
-      type: '[Product] Toggle Product Code'
-    })
+    this.store.dispatch(ProductActions.toggleProductCode())
   }
 
   newProduct(): void {
