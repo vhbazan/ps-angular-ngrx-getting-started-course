@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { AuthService } from './auth.service';
+import { getMaskedUserName } from './state/users.reducer';
 
 @Component({
   templateUrl: './login.component.html',
@@ -21,8 +22,7 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     this.maskUserName$ = this.store.pipe(
-      select('users'),
-      map(users => users.maskedUserName)
+      select(getMaskedUserName)
     );
 
     this.maskUserName$.subscribe(maskUserName => {
