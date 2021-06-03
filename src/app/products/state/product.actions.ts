@@ -8,3 +8,14 @@ export const setCurrentProduct = createAction(
   );
 export const clearCurrentProduct = createAction('[Product] Clear Current Product');
 export const initCurrentProduct = createAction('[Product] Init Current Product');
+export const loadProducts = createAction(
+  '[Product] Load'
+  );
+export const loadProductsSuccess = createAction(
+  '[Product] Load Success',
+  props<{products: Product[]}>()
+  );
+  export const loadProductsFail = createAction(
+    '[Product] Load Fail',
+    props<{error: string}>()
+    );
