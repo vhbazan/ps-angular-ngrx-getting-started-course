@@ -3,7 +3,7 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 
 import { Product } from '../product';
-import { getCurrentProduct, getShowProductCode, State, getProducts } from '../state/product.reducer';
+import { getCurrentProduct, getShowProductCode, State, getProducts, getError } from '../state/product.reducer';
 import * as ProductActions from "../state/product.actions";
 
 @Component({
@@ -13,7 +13,7 @@ import * as ProductActions from "../state/product.actions";
 })
 export class ProductListComponent implements OnInit {
   pageTitle = 'Products';
-  errorMessage: string;
+  errorMessage$: Observable<string>;
 
   products$: Observable<Product[]>;
   selectedProduct$: Observable<Product>;
@@ -35,6 +35,7 @@ export class ProductListComponent implements OnInit {
 
     this.displayCode$ = this.store.select(getShowProductCode);
 
+    this.errorMessage$ = this.store.select(getError)
   }
 
   checkChanged(): void {

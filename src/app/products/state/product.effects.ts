@@ -3,7 +3,8 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { ProductService } from '../product.service';
 
 import * as ProductActions from './product.actions';
-import { mergeMap, map } from 'rxjs/operators';
+import { mergeMap, map, catchError } from 'rxjs/operators';
+import { of } from 'rxjs';
 
 @Injectable()
 export class ProductEffects {
@@ -18,7 +19,9 @@ export class ProductEffects {
         mergeMap(()=> this.productService.getProducts().pipe(
           map(products => ProductActions.loadProductsSuccess({
             products
-          }))
+          })),
+          catchError(error =>
+            of(ProductActions.loadProductsFail({error})))
         ))
     );
   });
