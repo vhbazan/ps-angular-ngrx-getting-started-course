@@ -3,10 +3,10 @@ import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 
 import { AuthService } from './auth.service';
 import { getMaskedUserName } from './state/users.reducer';
+import * as UserActions from './state/users.actions';
 
 @Component({
   templateUrl: './login.component.html',
@@ -36,9 +36,7 @@ export class LoginComponent implements OnInit {
   }
 
   checkChanged(): void {
-    this.store.dispatch({
-      type: '[User] Toggle Mask User Name'
-    })
+    this.store.dispatch(UserActions.toggleMaskUserName())
   }
 
   login(loginForm: NgForm): void {
