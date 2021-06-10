@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
-import { select, Store } from '@ngrx/store';
+import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 
 import { AuthService } from './auth.service';
 import { getMaskedUserName } from './state/users.reducer';
 import * as UserActions from './state/users.actions';
+import { map } from 'rxjs/operators';
 
 @Component({
   templateUrl: './login.component.html',
@@ -18,17 +19,15 @@ export class LoginComponent implements OnInit {
   maskUserName$: Observable<boolean>;
   typeInput: string;
 
-  constructor(private store: Store<any>, private authService: AuthService, private router: Router) { }
+  constructor(private store: Store<Store>, private authService: AuthService, private router: Router) { }
 
   ngOnInit(): void {
-    this.maskUserName$ = this.store.pipe(
-      select(getMaskedUserName)
+    this.maskUserName$ = this.store.select(getMaskedUserName).pipe(
+      map(maskUserName => {
+        this.typeInput = maskUserName?  'password' : 'text';
+        return maskUserName
+      })
     );
-
-    this.maskUserName$.subscribe(maskUserName => {
-      this.typeInput = maskUserName?  'password' : 'text';
-
-    })
   }
 
   cancel(): void {
