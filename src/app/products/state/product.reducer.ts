@@ -61,9 +61,9 @@ export const getError = createSelector(
   state => state.error
 )
 
-export const productReducer = createReducer<ProductState>(
+export const productReducer = createReducer(
   initialState,
-  on(ProductActions.toggleProductCode, (state):  ProductState => {
+  on(ProductActions.toggleProductCode, (state): ProductState => {
     console.log('original state: ', JSON.stringify(state));
     return {
       ...state,
@@ -102,22 +102,19 @@ export const productReducer = createReducer<ProductState>(
       error: action.error
     }
   }),
-  on(ProductActions.updateProductSuccess, (state, action): ProductState => {
-    const updatedProducts = state.products.map(product =>
-      product.id === action.product.id ? action.product : product);
-
+  on(ProductActions.createProductSuccess, (state, action): ProductState => {
     return {
       ...state,
-      products: updatedProducts,
+      products: [...state.products, action.product],
       currentProductId: action.product.id,
       error: ''
-
     }
   }),
-  on(ProductActions.updateProductFail, (state, action): ProductState => {
+  on(ProductActions.createProductFail, (state, action): ProductState => {
     return {
       ...state,
-      error: action.error
+      currentProductId: 0,
+      error: 'Error creating product'
     }
   })
-);
+  );
