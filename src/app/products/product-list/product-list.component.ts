@@ -39,7 +39,7 @@ export class ProductListComponent implements OnInit {
   }
 
   checkChanged(): void {
-    this.store.dispatch(ProductActions.toggleProductCode())
+    this.store.dispatch(ProductActions.toggleProductCode());
   }
 
   newProduct(): void {
