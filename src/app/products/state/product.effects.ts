@@ -2,10 +2,9 @@ import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { ProductService } from '../product.service';
 
-import * as ProductActions from './product.actions';
 import { mergeMap, map, catchError, concatMap } from 'rxjs/operators';
 import { of } from 'rxjs';
-
+import { ProductApiActions, ProductPageActions } from './actions';
 @Injectable()
 export class ProductEffects {
 
@@ -15,13 +14,13 @@ export class ProductEffects {
 
   loadProducts$ = createEffect(() => {
     return this.actions$.pipe(
-        ofType(ProductActions.loadProducts),
+        ofType(ProductPageActions.loadProducts),
         mergeMap(()=> this.productService.getProducts().pipe(
-          map(products => ProductActions.loadProductsSuccess({
+          map(products => ProductApiActions.loadProductsSuccess({
             products
           })),
           catchError(error =>
-            of(ProductActions.loadProductsFail({error})))
+            of(ProductApiActions.loadProductsFail({error})))
         ))
     );
   });
@@ -29,11 +28,11 @@ export class ProductEffects {
   updateProduct$ = createEffect(() => {
     return this.actions$
       .pipe(
-        ofType(ProductActions.updateProduct),
+        ofType(ProductPageActions.updateProduct),
         concatMap(action =>
           this.productService.updateProduct(action.product).pipe(
-            map(product => ProductActions.updateProductSuccess( { product })),
-            catchError(error => of(ProductActions.updateProductFail({ error })))
+            map(product => ProductApiActions.updateProductSuccess( { product })),
+            catchError(error => of(ProductApiActions.updateProductFail({ error })))
           ))
       )
   })
@@ -41,11 +40,11 @@ export class ProductEffects {
   createProduct$ = createEffect(() => {
     return this.actions$
     .pipe(
-      ofType(ProductActions.createProduct),
+      ofType(ProductPageActions.createProduct),
       concatMap(action =>
         this.productService.createProduct(action.product).pipe(
-          map(product => ProductActions.createProductSuccess({product})),
-          catchError(error => of(ProductActions.createProductFail({ error })))
+          map(product => ProductApiActions.createProductSuccess({product})),
+          catchError(error => of(ProductApiActions.createProductFail({ error })))
         )
         )
     )
@@ -55,11 +54,11 @@ export class ProductEffects {
 
     return this.actions$
       .pipe(
-        ofType(ProductActions.deleteProduct),
+        ofType(ProductPageActions.deleteProduct),
         concatMap(action =>
           this.productService.deleteProduct(action.productId).pipe(
-            map(() => ProductActions.deleteProductSuccess({productId: action.productId})),
-            catchError(error => of(ProductActions.deleteProductFail({error})))
+            map(() => ProductApiActions.deleteProductSuccess({productId: action.productId})),
+            catchError(error => of(ProductApiActions.deleteProductFail({error})))
           )
           )
       )
